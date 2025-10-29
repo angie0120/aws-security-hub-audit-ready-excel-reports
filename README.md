@@ -1,20 +1,20 @@
 # AWS Security Hub Audit-Ready Excel Reports
 
-Automates AWS Security Hub findings into audit-ready Excel reports with summary dashboards, and KPIs for GRC teams and auditors.
+Automates AWS Security Hub findings into audit-ready Excel reports with executive dashboards for GRC and audit teams.
 
 ---
 
 ## About this project
 
-This project demonstrates how GRC engineers can bridge the gap between automated security findings and audit teams’ preferred workflows.
+This project shows how GRC engineers can bridge the gap between automated AWS findings and audit workflows.
 
-The AWS Security Hub Excel Reporting tool automatically collects security findings, transforms them into structured Excel workbooks, and provides:
-- Detailed summaries of findings
-- Severity and compliance status dashboards
-- Executive-ready KPI summaries for audit reporting
+It collects AWS Security Hub findings, structures them into Excel workbooks, and provides:
+- Summarized findings by severity and compliance status
+- Detailed evidence sheets for audit teams
+- Executive-ready KPI dashboards
 
 **Why this matters**:
-Audit teams rely on Excel for accessibility, offline use, and analysis. This project demonstrates a scalable way for GRC teams to automate Security Hub reporting while delivering familiar, actionable outputs to auditors.
+Audit and compliance teams often prefer Excel for offline use, filtering, and recordkeeping.
 
 ---
 
@@ -27,17 +27,20 @@ Audit teams rely on Excel for accessibility, offline use, and analysis. This pro
 | **Output Format**      | Excel (.xlsx) with pivot analysis and dashboards                    |
 | **Key Outcome**        | Detailed findings + summary KPIs + remediation guidance             |
 | **Compliance Context** | SOC 2, ISO 27001, PCI DSS                                           |
-| **Tech Stack**         | Python • AWS Lambda • Security Hub • S3 • CloudFormation            |
+| **AWS Services & Tools**| Python • AWS Lambda • Security Hub • S3 • CloudFormation           |
 
 ---
 
-## Logic flowchart
+## Architecture Overview
 
 ![flowchart](./assets/automated-excel-report-flowchart.png)
 
 ---
 
 ## Quick Start & Deployment
+
+**Before you start**:
+Use an AWS account or role with **AdministratorAccess** to deploy the CloudFormation stack and create IAM, Lambda, and S3 resources.
 
 **1**. Configure your AWS credentials:
 ```bash
@@ -83,7 +86,9 @@ aws cloudformation deploy \
   --profile profilename
 ```
 
-You should see this is your terminal:
+**Note**: `CAPABILITY_NAMED_IAM` requires IAM permissions to create roles and policies.
+
+You should see this in your terminal:
 ```bash
 Waiting for changeset to be created..
 Waiting for stack create/update to complete
@@ -101,7 +106,7 @@ Successfully created/updated stack - security-hub-excel-pipeline
 
 > This will execute the Lambda and save the output metadata in `response.json`.
 
-You should see this appear is your terminal:
+You should see this appear in your terminal:
 ```bash
 {
     "StatusCode": 200,
@@ -109,7 +114,7 @@ You should see this appear is your terminal:
 }
 ```
 
-**7**. Check S3 for the report. Once the Lambda finishes (usually < 30 seconds), check your S3 bucket. You should see a new .xlsx file created (naming may include timestamp or date).
+**7**. Check S3 for the report. Once the Lambda finishes (usually < 30 seconds), check your S3 bucket where you should see a new .xlsx file created (naming may include timestamp or date).
 
 **8**. Inspect Logs (optional but helpful). If no file appears or you want to verify what happened, CloudWatch will stream the Lambda’s log output in real time.
 
@@ -167,6 +172,8 @@ You should see this appear is your terminal:
 
 ## Compliance Context
 
+These mappings illustrate how Security Hub data supports control evidence across frameworks.
+
 | Framework | Description                                                  |
 | --------- | ------------------------------------------------------------ |
 | SOC 2     | Demonstrates continuous monitoring and control effectiveness |
@@ -177,8 +184,8 @@ You should see this appear is your terminal:
 
 ## Governance & Security
 
-- Reports stored securely in S3 with encryption at rest.
-- IAM permissions follow least privilege principle. Lambda execution roles are scoped to only the permissions required for reading Security Hub findings, writing Excel reports to the target S3 bucket, and logging to CloudWatch. No broader permissions are granted, supporting security best practices and audit readiness.
+- Reports are stored securely in S3 with encryption at rest. IAM roles follow least privilege principles.
+- Lambda functions only have the permissions required to read Security Hub findings, write Excel reports, and log to CloudWatch, nothing more. This supports security best practices and audit readiness.
 - Structured reporting reduces audit errors and speeds review cycles.
 
 ---
@@ -193,11 +200,12 @@ You should see this appear is your terminal:
 | **AWS Infrastructure**        | Designed CloudFormation stacks with Lambda, S3, and IAM roles            |
 | **Stakeholder Communication** | Delivered executive-ready KPIs and summaries for auditors and management |
 
+This project illustrates how automation can turn continuous monitoring data into structured audit evidence.
+
 ---
 
 ## Resources  
 
-- Project repo: [Security Hub to Excel Pipeline](https://www.patreon.com/posts/136434191?collection=1606822)  
 - [AWS CLI Reference](https://docs.aws.amazon.com/cli)  
 - [S3 Bucket Naming Rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)  
 - [CloudFormation Basics](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
