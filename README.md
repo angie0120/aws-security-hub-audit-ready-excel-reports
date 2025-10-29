@@ -24,8 +24,8 @@ Audit teams rely on Excel for accessibility, offline use, and analysis. This pro
 | ---------------------- | ------------------------------------------------------------------- |
 | **Purpose**            | Automate Security Hub reporting into audit-ready Excel workbooks    |
 | **Focus**              | Present structured, actionable security findings for GRC & auditors |
-| **Output Format**      | Excel (.xlsx) with pivot tables and dashboards                      |
-| **Key Outcome**        | Detailed findings + summary KPIs + remediation guidance            |
+| **Output Format**      | Excel (.xlsx) with pivot analysis and dashboards                    |
+| **Key Outcome**        | Detailed findings + summary KPIs + remediation guidance             |
 | **Compliance Context** | SOC 2, ISO 27001, PCI DSS                                           |
 | **Tech Stack**         | Python • AWS Lambda • Security Hub • S3 • CloudFormation            |
 
@@ -150,9 +150,9 @@ You should see this appear is your terminal:
 2. Lambda function collects Security Hub findings on schedule.
 3. Findings are transformed into structured data.
 4. Excel workbook is generated with:
-  - Detailed findings
-  - Pivot tables for severity and compliance
-  - Summary KPIs
+    - Detailed findings
+    - Pivot analysis for severity and compliance
+    - Summary KPIs
 5. Workbook is uploaded to S3 for audit-ready distribution.
 
 ---
@@ -188,7 +188,7 @@ You should see this appear is your terminal:
 | Skill Area                    | Description                                                              |
 | ----------------------------- | ------------------------------------------------------------------------ |
 | **GRC Automation**            | Built serverless pipelines to automate Security Hub reporting            |
-| **Audit Reporting**           | Produced Excel workbooks with pivot dashboard                            |
+| **Audit Reporting**           | Produced Excel workbooks with pivot analysis dashboard                   |
 | **Data Transformation**       | Converted raw AWS API data into structured, actionable formats           |
 | **AWS Infrastructure**        | Designed CloudFormation stacks with Lambda, S3, and IAM roles            |
 | **Stakeholder Communication** | Delivered executive-ready KPIs and summaries for auditors and management |
