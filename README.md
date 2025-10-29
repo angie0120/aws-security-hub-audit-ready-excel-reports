@@ -206,6 +206,7 @@ This project illustrates how automation can turn continuous monitoring data into
 
 ## Resources  
 
+- [Link to full code](https://www.patreon.com/posts/136434191?collection=1606822)
 - [AWS CLI Reference](https://docs.aws.amazon.com/cli)  
 - [S3 Bucket Naming Rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)  
 - [CloudFormation Basics](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
