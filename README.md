@@ -13,8 +13,8 @@ The AWS Security Hub Excel Reporting tool automatically collects security findin
 - Severity and compliance status dashboards
 - Executive-ready KPI summaries for audit reporting
 
-> Why this matters:
-> Audit teams rely on Excel for accessibility, offline use, and analysis. This project demonstrates a scalable way for GRC teams to automate Security Hub reporting while delivering familiar, actionable outputs to auditors.
+**Why this matters**:
+Audit teams rely on Excel for accessibility, offline use, and analysis. This project demonstrates a scalable way for GRC teams to automate Security Hub reporting while delivering familiar, actionable outputs to auditors.
 
 ---
 
@@ -39,25 +39,25 @@ The AWS Security Hub Excel Reporting tool automatically collects security findin
 
 ## Quick Start & Deployment
 
-1. Configure your AWS credentials:
-`aws configure sso`
+**1**. Configure your AWS credentials:
+```aws configure sso```
 
 Verify your credentials:
-`aws sts get-caller-identity --profile profilename'
+```aws sts get-caller-identity --profile profilename```
 
-2. Activate Security Hub:
-`aws securityhub enable-security-hub --region us-east-1 --profile profilename`
+**2**. Activate Security Hub:
+```aws securityhub enable-security-hub --region us-east-1 --profile profilename```
 
 Verify Security Hub is enabled:
-`aws securityhub describe-hub --region us-east-1 --profile profilename`
+```aws securityhub describe-hub --region us-east-1 --profile profilename```
 
-3. Create your S3 bucket:
-`aws s3 mb s3://security-hub-reports-1755129821-axl --region us-east-1 --profile profilename`
+**3**. Create your S3 bucket:
+```aws s3 mb s3://security-hub-reports-1755129821-axl --region us-east-1 --profile profilename```
 
-4. Upload your Lambda source code to S3:
-`aws s3 cp lambda-source.zip s3://security-hub-reports-1755129821-axl/source/lambda-source.zip --profile profilename`
+**4**. Upload your Lambda source code to S3:
+```aws s3 cp lambda-source.zip s3://security-hub-reports-1755129821-axl/source/lambda-source.zip --profile profilename```
 
-5. Deploy your CloudFormation stack:
+**5**. Deploy your CloudFormation stack:
 
 ```bash
 aws cloudformation deploy \
@@ -78,7 +78,7 @@ Waiting for stack create/update to complete
 Successfully created/updated stack - security-hub-excel-pipeline
 ```
 
-6. Invoke the Lambda manually:
+**6**. Invoke the Lambda manually:
 ```bash
  aws lambda invoke \
   --function-name security-hub-excel-generator-cf \
@@ -97,11 +97,11 @@ You should see this appear is your terminal:
 }
 ```
 
-7. Check S3 for the report. Once the Lambda finishes (usually < 30 seconds), check your S3 bucket. You should see a new .xlsx file created (naming may include timestamp or date).
+**7**. Check S3 for the report. Once the Lambda finishes (usually < 30 seconds), check your S3 bucket. You should see a new .xlsx file created (naming may include timestamp or date).
 
-8. Inspect Logs (optional but helpful). If no file appears or you want to verify what happened, CloudWatch will stream the Lambda’s log output in real time.
+**8**. Inspect Logs (optional but helpful). If no file appears or you want to verify what happened, CloudWatch will stream the Lambda’s log output in real time.
 
-9. After you've run the Lambda invoke command, check the contents of response.json. The output should confirm your entire Security Hub → Excel → S3 pipeline is working exactly as designed.
+**9**. After you've run the Lambda invoke command, check the contents of response.json. The output should confirm your entire Security Hub → Excel → S3 pipeline is working exactly as designed.
 
 #### Execution Summary
 
@@ -113,7 +113,6 @@ You should see this appear is your terminal:
 | `key`                | Report location: `reports/security_hub_report_20251029_172423.xlsx`        |
 | `findings_count`     | 15 findings pulled from AWS Security Hub                                   |
 | `worksheets_created` | 3 sheets: **Executive Summary**, **Detailed Findings**, **Pivot Analysis** |
-
 
 ---
 
@@ -184,3 +183,11 @@ You should see this appear is your terminal:
 
 ---
 
+## Resources  
+
+- Project repo: [Security Hub to Excel Pipeline](https://www.patreon.com/posts/136434191?collection=1606822)  
+- [AWS CLI Reference](https://docs.aws.amazon.com/cli)  
+- [S3 Bucket Naming Rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)  
+- [CloudFormation Basics](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
+
+---
