@@ -40,22 +40,34 @@ Audit teams rely on Excel for accessibility, offline use, and analysis. This pro
 ## Quick Start & Deployment
 
 **1**. Configure your AWS credentials:
-```aws configure sso```
+```bash
+aws configure sso
+```
 
 Verify your credentials:
-```aws sts get-caller-identity --profile profilename```
+```bash
+aws sts get-caller-identity --profile profilename
+```
 
 **2**. Activate Security Hub:
-```aws securityhub enable-security-hub --region us-east-1 --profile profilename```
+```bash
+aws securityhub enable-security-hub --region us-east-1 --profile profilename
+```
 
 Verify Security Hub is enabled:
-```aws securityhub describe-hub --region us-east-1 --profile profilename```
+```bash
+aws securityhub describe-hub --region us-east-1 --profile profilename
+```
 
 **3**. Create your S3 bucket:
-```aws s3 mb s3://security-hub-reports-1755129821-axl --region us-east-1 --profile profilename```
+```bash
+aws s3 mb s3://security-hub-reports-1755129821-axl --region us-east-1 --profile profilename
+```
 
 **4**. Upload your Lambda source code to S3:
-```aws s3 cp lambda-source.zip s3://security-hub-reports-1755129821-axl/source/lambda-source.zip --profile profilename```
+```bash
+aws s3 cp lambda-source.zip s3://security-hub-reports-1755129821-axl/source/lambda-source.zip --profile profilename
+```
 
 **5**. Deploy your CloudFormation stack:
 
@@ -138,9 +150,9 @@ You should see this appear is your terminal:
 2. Lambda function collects Security Hub findings on schedule.
 3. Findings are transformed into structured data.
 4. Excel workbook is generated with:
-- Detailed findings
-- Pivot tables for severity and compliance
-- Summary KPIs
+  - Detailed findings
+  - Pivot tables for severity and compliance
+  - Summary KPIs
 5. Workbook is uploaded to S3 for audit-ready distribution.
 
 ---
