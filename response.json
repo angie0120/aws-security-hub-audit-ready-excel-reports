@@ -1,0 +1,1 @@
+{"statusCode": 200, "body": "{\"message\": \"Security Hub Excel report generated successfully\", \"bucket\": \"security-hub-reports-1755129821-axl\", \"key\": \"reports/security_hub_report_20251029_172423.xlsx\", \"findings_count\": 15, \"timestamp\": \"20251029_172423\", \"worksheets_created\": [\"Executive Summary\", \"Detailed Findings\", \"Pivot Analysis\"]}"}

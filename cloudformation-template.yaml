@@ -1,0 +1,158 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Security Hub to Excel Pipeline - Lambda Function with S3 Source'
+
+Parameters:
+  S3BucketName:
+    Type: String
+    Description: S3 bucket name for storing Excel reports
+    Default: security-hub-reports-1755129821
+  
+  SourceS3Key:
+    Type: String
+    Description: S3 key for Lambda source code
+    Default: source/lambda-source.zip
+  
+  FunctionName:
+    Type: String
+    Description: Lambda function name
+    Default: security-hub-excel-generator-cf
+  
+  MemorySize:
+    Type: Number
+    Description: Lambda function memory size in MB
+    Default: 512
+    MinValue: 128
+    MaxValue: 3008
+  
+  Timeout:
+    Type: Number
+    Description: Lambda function timeout in seconds
+    Default: 300
+    MinValue: 1
+    MaxValue: 900
+
+Resources:
+  # IAM Role for Lambda Function
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${FunctionName}-execution-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: SecurityHubExcelGeneratorPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - securityhub:GetFindings
+                  - securityhub:GetEnabledStandards
+                  - securityhub:DescribeHub
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:PutObjectAcl
+                Resource: !Sub 'arn:aws:s3:::${S3BucketName}/*'
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: !Sub 'arn:aws:s3:::${S3BucketName}/${SourceS3Key}'
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
+
+  # Lambda Function
+  SecurityHubExcelFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Ref FunctionName
+      Runtime: python3.9
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: !Ref S3BucketName
+        S3Key: !Ref SourceS3Key
+      MemorySize: !Ref MemorySize
+      Timeout: !Ref Timeout
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref S3BucketName
+      Description: 'Security Hub to Excel report generator with CloudFormation deployment'
+      Tags:
+        - Key: Project
+          Value: SecurityHubExcelPipeline
+        - Key: Environment
+          Value: Development
+        - Key: DeploymentMethod
+          Value: CloudFormation
+
+  # CloudWatch Log Group
+  FunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${FunctionName}'
+      RetentionInDays: 30
+
+  # EventBridge Rule for Scheduled Execution (Optional - disabled by default)
+  ScheduledExecutionRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub '${FunctionName}-weekly-schedule'
+      Description: 'Weekly execution of Security Hub Excel generator'
+      ScheduleExpression: 'rate(7 days)'
+      State: DISABLED
+      Targets:
+        - Arn: !GetAtt SecurityHubExcelFunction.Arn
+          Id: SecurityHubExcelTarget
+
+  # Permission for EventBridge to invoke Lambda
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref SecurityHubExcelFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt ScheduledExecutionRule.Arn
+
+Outputs:
+  FunctionName:
+    Description: 'Lambda function name'
+    Value: !Ref SecurityHubExcelFunction
+    Export:
+      Name: !Sub '${AWS::StackName}-FunctionName'
+  
+  FunctionArn:
+    Description: 'Lambda function ARN'
+    Value: !GetAtt SecurityHubExcelFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-FunctionArn'
+  
+  S3BucketName:
+    Description: 'S3 bucket for reports'
+    Value: !Ref S3BucketName
+    Export:
+      Name: !Sub '${AWS::StackName}-S3Bucket'
+  
+  ScheduleRuleArn:
+    Description: 'EventBridge rule ARN for scheduling'
+    Value: !GetAtt ScheduledExecutionRule.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-ScheduleRule'
+  
+  LogGroupName:
+    Description: 'CloudWatch log group name'
+    Value: !Ref FunctionLogGroup
+    Export:
+      Name: !Sub '${AWS::StackName}-LogGroup'
