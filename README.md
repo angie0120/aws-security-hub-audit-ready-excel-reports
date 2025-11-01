@@ -1,6 +1,6 @@
 # AWS Security Hub Audit-Ready Excel Reports
 
-Automates AWS Security Hub findings into audit-ready Excel reports with executive dashboards for GRC and audit teams.
+Automates AWS Security Hub findings into audit-ready Excel reports with executive dashboards for audit teams.
 
 ---
 
@@ -14,7 +14,7 @@ It collects AWS Security Hub findings, structures them into Excel workbooks, and
 - Executive-ready KPI dashboards
 
 **Why this matters**:
-Audit and compliance teams often prefer Excel for offline use, filtering, and recordkeeping.
+Audit teams often prefer Excel for offline use, filtering, and recordkeeping.
 
 ---
 
